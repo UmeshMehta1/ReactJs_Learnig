@@ -5,6 +5,7 @@ function App() {
   const [numberAllowed, setNumberAllowed] = useState(false);
   const [charAllowed, setCharAllowed] = useState(false);
   const [password, setPassword] = useState("");
+  const [bgColor, setBgColor] = useState('blue');
 
   const passwordGenerator = useCallback(()=>{
     let pass ="";
@@ -21,15 +22,25 @@ function App() {
   },[length, numberAllowed, charAllowed, setPassword])
 
   const passwordRef = useRef(null);
+
   const copyPasswordToClipboard = useCallback(() => {
+    
     passwordRef.current?.select();
     passwordRef.current?.setSelectionRange(0, 999);
     window.navigator.clipboard.writeText(password)
+    setBgColor('gray');
+
+    setTimeout(() => {
+      setBgColor('blue');
+    }, 200);
   }, [password])
 
   useEffect(()=>{
     passwordGenerator();
+    
   },[length, numberAllowed,charAllowed, passwordGenerator])
+
+ 
 
   return (
     <>
@@ -45,13 +56,13 @@ function App() {
             ref={passwordRef}
           />
           
-          <button onClick={copyPasswordToClipboard} className="outline-none bg-blue-700 text-white px-3 py-0.5 shrink-0">
+          <button onClick={copyPasswordToClipboard} style={{backgroundColor: bgColor}} className="outline-none  text-white px-3 py-0.5 shrink-0">
             Copy
           </button>
         </div>
 
         <div className="flex text-sm gap-x-2">
-        <div className="flex text-sm gap-x-1">
+        <div className="flex text-sm gap-x-1">  
           <input     //for range
             type="range"
             value={length}
